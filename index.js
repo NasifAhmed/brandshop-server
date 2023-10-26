@@ -29,6 +29,20 @@ async function run() {
             res.send(result);
         });
 
+        app.get("/getBrand/:brand_name", async (req, res) => {
+            const brandName = req.params.brand_name;
+            const cursor = carCollection.find({ brand_name: brandName });
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        app.post("/addCar", async (req, res) => {
+            const newCar = req.body;
+            console.log(newCar);
+            const result = await carCollection.insertOne(newCar);
+            res.send(result);
+        });
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log(
