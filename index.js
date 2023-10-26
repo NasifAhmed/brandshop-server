@@ -36,6 +36,13 @@ async function run() {
             res.send(result);
         });
 
+        app.get("/getProduct/:product_name", async (req, res) => {
+            const productName = req.params.product_name;
+            const cursor = carCollection.find({ name: productName });
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
         app.post("/addCar", async (req, res) => {
             const newCar = req.body;
             console.log(newCar);
