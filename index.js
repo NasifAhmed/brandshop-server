@@ -43,6 +43,32 @@ async function run() {
             res.send(result);
         });
 
+        app.put("/UpdateProduct/:id", async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const upddatedProduct = req.body;
+            const product = {
+                $set: {
+                    img_url: upddatedProduct.img_url,
+                    name: upddatedProduct.name,
+                    brand_name: upddatedProduct.brand_name,
+                    type: upddatedProduct.type,
+                    price: upddatedProduct.price,
+                    desc: upddatedProduct.desc,
+                    rating: upddatedProduct.rating,
+                },
+            };
+
+            const result = await carCollection.updateOne(
+                filter,
+                product,
+                options
+            );
+            res.send(result);
+        });
+
         app.post("/addCar", async (req, res) => {
             const newCar = req.body;
             console.log(newCar);
