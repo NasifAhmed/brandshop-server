@@ -76,6 +76,31 @@ async function run() {
             res.send(result);
         });
 
+        app.post("/addToCart", async (req, res) => {
+            const cart = client.db("carDB").collection("cart");
+            const cartItem = req.body;
+            console.log(cartItem);
+            const result = await cart.insertOne(cartItem);
+            res.send(result);
+        });
+
+        app.get("/getCart/:user_email", async (req, res) => {
+            const cart = client.db("carDB").collection("cart");
+            const userEmail = req.params.user_email;
+            const cursor = cart.find({ owner: userEmail });
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        app.delete("/deleteCartItem/:user_email/:id", async (req, res) => {
+            const cart = client.db("carDB").collection("cart");
+            const id = req.params.id;
+            const userEmail = req.params.user_email;
+            const query = { _id: id, owner: userEmail };
+            const result = await cart.deleteOne(query);
+            res.send(result);
+        });
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log(
